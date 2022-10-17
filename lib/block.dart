@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grocery_store/data/products_data.dart';
 
 enum GroceryState {
   normal,
@@ -8,6 +9,7 @@ enum GroceryState {
 
 class GroceryStoreBlock with ChangeNotifier {
   GroceryState groceryState = GroceryState.normal;
+  List<GroceryProduct> catalog = List.unmodifiable(groceryProducts);
 
   void changeToNormal() {
     groceryState = GroceryState.normal;
