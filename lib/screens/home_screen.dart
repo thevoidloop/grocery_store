@@ -3,7 +3,7 @@ import 'package:grocery_store/block.dart';
 import 'package:grocery_store/data/grocery_provider.dart';
 import 'package:grocery_store/screens/grocery_list_screen.dart';
 
-const _backgroundColor = Color(0xFFF6F5F2);
+const backgroundColor = Color(0xFFF6F5F2);
 const cartBarHeight = 100.0;
 const _panelTransition = Duration(milliseconds: 500);
 
@@ -99,7 +99,7 @@ class _AppBarGrocery extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: kToolbarHeight,
-      color: _backgroundColor,
+      color: backgroundColor,
       child: Row(
         children: const [
           BackButton(
