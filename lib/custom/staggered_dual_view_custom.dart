@@ -6,13 +6,15 @@ class StaggeredDualView extends StatelessWidget {
       required this.itemBuilder,
       required this.itemCount,
       this.spacing = 0.0,
-      this.aspectRation = 0.5})
+      this.aspectRation = 0.5,
+      this.offsetPercent = 0.5})
       : super(key: key);
 
   final IndexedWidgetBuilder itemBuilder;
   final int itemCount;
   final double spacing;
   final double aspectRation;
+  final double offsetPercent;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +38,8 @@ class StaggeredDualView extends StatelessWidget {
                 mainAxisSpacing: spacing),
             itemBuilder: (context, index) {
               return Transform.translate(
-                offset: Offset(0.0, index.isOdd ? (itemHeight * 0.5) : 0.0),
+                offset: Offset(
+                    0.0, index.isOdd ? (itemHeight * offsetPercent) : 0.0),
                 child: itemBuilder(context, index),
               );
             }),

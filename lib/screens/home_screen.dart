@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   double _getTopForWhitePanel(GroceryState state, Size size) {
     if (state == GroceryState.normal) {
-      return -cartBarHeight;
+      return -cartBarHeight + kToolbarHeight;
     } else if (state == GroceryState.cart) {
       return -(size.height - kToolbarHeight - cartBarHeight / 2);
     }
@@ -37,9 +37,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   double _getTopForBlackPanel(GroceryState state, Size size) {
     if (state == GroceryState.normal) {
-      return (size.height - kToolbarHeight - cartBarHeight);
+      return (size.height - cartBarHeight);
     } else if (state == GroceryState.cart) {
       return cartBarHeight / 2;
+    }
+    return 0.0;
+  }
+
+  double _getTopForAppBar(GroceryState state) {
+    if (state == GroceryState.normal) {
+      return 0.0;
+    } else if (state == GroceryState.cart) {
+      return -cartBarHeight;
     }
     return 0.0;
   }
@@ -55,39 +64,71 @@ class _HomeScreenState extends State<HomeScreen> {
         builder: (context, _) {
           return Scaffold(
               backgroundColor: Colors.black,
-              body: Column(children: [
-                _AppBarGrocery(),
-                Expanded(
-                    child: Stack(
-                  children: [
-                    AnimatedPositioned(
-                        left: 0,
-                        right: 0,
-                        top: _getTopForWhitePanel(block.groceryState, size),
-                        height: size.height - kToolbarHeight,
-                        duration: _panelTransition,
-                        curve: Curves.decelerate,
+              body: Stack(
+                children: [
+                  AnimatedPositioned(
+                      left: 0,
+                      right: 0,
+                      top: _getTopForWhitePanel(block.groceryState, size),
+                      height: size.height - kToolbarHeight,
+                      duration: _panelTransition,
+                      curve: Curves.decelerate,
+                      child: ClipRRect(
+                        borderRadius: const BorderRadius.only(
+                            bottomLeft: Radius.circular(30),
+                            bottomRight: Radius.circular(30)),
                         child: Container(
                           decoration: const BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(30),
-                                  bottomRight: Radius.circular(30))),
+                            color: Colors.white,
+                          ),
                           child: const GroceryStoreList(),
-                        )),
-                    AnimatedPositioned(
-                        left: 0,
-                        right: 0,
-                        top: _getTopForBlackPanel(block.groceryState, size),
-                        height: size.height,
-                        duration: _panelTransition,
-                        curve: Curves.decelerate,
-                        child: GestureDetector(
-                            onVerticalDragUpdate: _onVerticalGesture,
-                            child: Container(color: Colors.black)))
-                  ],
-                ))
-              ]));
+                        ),
+                      )),
+                  AnimatedPositioned(
+                      left: 0,
+                      right: 0,
+                      top: _getTopForBlackPanel(block.groceryState, size),
+                      height: size.height,
+                      duration: _panelTransition,
+                      curve: Curves.decelerate,
+                      child: GestureDetector(
+                          onVerticalDragUpdate: _onVerticalGesture,
+                          child: Container(
+                            color: Colors.black,
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(25.0),
+                                  child: Row(
+                                    children: const [
+                                      Text(
+                                        'Cart',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                            fontSize: 30),
+                                      ),
+                                      Spacer(),
+                                      CircleAvatar(
+                                        backgroundColor: Colors.red,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                const Spacer(),
+                                const Placeholder()
+                              ],
+                            ),
+                          ))),
+                  AnimatedPositioned(
+                      duration: _panelTransition,
+                      curve: Curves.decelerate,
+                      left: 0,
+                      right: 0,
+                      top: _getTopForAppBar(block.groceryState),
+                      child: _AppBarGrocery()),
+                ],
+              ));
         },
       ),
     );
