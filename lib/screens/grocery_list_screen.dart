@@ -27,7 +27,11 @@ class GroceryStoreList extends StatelessWidget {
                   pageBuilder: (context, animation, __) {
                     return FadeTransition(
                         opacity: animation,
-                        child: GroceryDetails(product: product));
+                        child: GroceryDetails(
+                            product: product,
+                            onProductAdded: () {
+                              bloc.addProduct(product);
+                            }));
                   },
                 ));
               },

@@ -2,10 +2,28 @@ import 'package:flutter/material.dart';
 
 import '../data/products_data.dart';
 
-class GroceryDetails extends StatelessWidget {
-  const GroceryDetails({Key? key, required this.product}) : super(key: key);
+class GroceryDetails extends StatefulWidget {
+  const GroceryDetails(
+      {Key? key, required this.product, required this.onProductAdded})
+      : super(key: key);
 
   final GroceryProduct product;
+  final VoidCallback onProductAdded;
+
+  @override
+  State<GroceryDetails> createState() => _GroceryDetailsState();
+}
+
+class _GroceryDetailsState extends State<GroceryDetails> {
+  String heroTag = '';
+
+  void _addToCart(BuildContext context) {
+    setState(() {
+      heroTag = 'details';
+    });
+    widget.onProductAdded();
+    Navigator.of(context).pop();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,22 +45,22 @@ class GroceryDetails extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Hero(
-                    tag: 'list_${product.name}',
+                    tag: 'list_${widget.product.name}$heroTag',
                     child: Image.asset(
-                      product.image,
+                      widget.product.image,
                       fit: BoxFit.fitWidth,
                       height: size * 0.4,
                     ),
                   ),
                   Text(
-                    product.name,
+                    widget.product.name,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 40,
                     ),
                   ),
                   Text(
-                    product.weight,
+                    widget.product.weight,
                     style: Theme.of(context)
                         .textTheme
                         .subtitle1
@@ -52,7 +70,7 @@ class GroceryDetails extends StatelessWidget {
                     children: [
                       const Spacer(),
                       Text(
-                        'Q${product.price}',
+                        'Q${widget.product.price}',
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 40,
@@ -74,7 +92,7 @@ class GroceryDetails extends StatelessWidget {
                     height: 20,
                   ),
                   Text(
-                    product.description,
+                    widget.product.description,
                     style: Theme.of(context)
                         .textTheme
                         .bodyLarge
@@ -99,7 +117,7 @@ class GroceryDetails extends StatelessWidget {
                   Expanded(
                       flex: 4,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () => _addToCart(context),
                         style: ElevatedButton.styleFrom(
                             primary: const Color(0xFFF4C459),
                             shape: RoundedRectangleBorder(
